@@ -1,0 +1,14 @@
+stages:
+ - deploy
+deploy:
+ stage: deploy
+ only: 
+   - main
+ script:
+   - git checkout backend-branch
+   - git reset --hard
+   - git pull
+   - sudo rsync -avz --no-perms --no-owner --no-group /home/gitlab-runner/builds/zucwjVnyt/0/vag57/studentmarket/ /home/user1/studentmarket
+   - sudo chown user1 -R /home/user1/studentmarket
+   - sudo supervisorctl stop all
+   - sudo supervisorctl start all

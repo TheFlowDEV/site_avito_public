@@ -1,0 +1,73 @@
+{
+  "status": "done",
+  "assets": {
+    "7043db1e91c4ae53dd66.woff2": {
+      "name": "7043db1e91c4ae53dd66.woff2",
+      "path": "C:\\Users\\wladimir\\Desktop\\u_project\\TPUvito\\static\\webpack_bundles\\7043db1e91c4ae53dd66.woff2",
+      "publicPath": "auto"
+    },
+    "add_adv.js": {
+      "name": "add_adv.js",
+      "path": "C:\\Users\\wladimir\\Desktop\\u_project\\TPUvito\\static\\webpack_bundles\\add_adv.js",
+      "publicPath": "auto"
+    },
+    "adverstiments.js": {
+      "name": "adverstiments.js",
+      "path": "C:\\Users\\wladimir\\Desktop\\u_project\\TPUvito\\static\\webpack_bundles\\adverstiments.js",
+      "publicPath": "auto"
+    },
+    "chat.js": {
+      "name": "chat.js",
+      "path": "C:\\Users\\wladimir\\Desktop\\u_project\\TPUvito\\static\\webpack_bundles\\chat.js",
+      "publicPath": "auto"
+    },
+    "e49704904ff5b793ca33.svg": {
+      "name": "e49704904ff5b793ca33.svg",
+      "path": "C:\\Users\\wladimir\\Desktop\\u_project\\TPUvito\\static\\webpack_bundles\\e49704904ff5b793ca33.svg",
+      "publicPath": "auto"
+    },
+    "f07084d105168022f4a9.svg": {
+      "name": "f07084d105168022f4a9.svg",
+      "path": "C:\\Users\\wladimir\\Desktop\\u_project\\TPUvito\\static\\webpack_bundles\\f07084d105168022f4a9.svg",
+      "publicPath": "auto"
+    },
+    "index.js": {
+      "name": "index.js",
+      "path": "C:\\Users\\wladimir\\Desktop\\u_project\\TPUvito\\static\\webpack_bundles\\index.js",
+      "publicPath": "auto"
+    },
+    "profile.js": {
+      "name": "profile.js",
+      "path": "C:\\Users\\wladimir\\Desktop\\u_project\\TPUvito\\static\\webpack_bundles\\profile.js",
+      "publicPath": "auto"
+    },
+    "register_oauth.js": {
+      "name": "register_oauth.js",
+      "path": "C:\\Users\\wladimir\\Desktop\\u_project\\TPUvito\\static\\webpack_bundles\\register_oauth.js",
+      "publicPath": "auto"
+    }
+  },
+  "chunks": {
+    "add_adv": [
+      "add_adv.js"
+    ],
+    "adverstiments": [
+      "adverstiments.js"
+    ],
+    "chat": [
+      "chat.js"
+    ],
+    "index": [
+      "index.js"
+    ],
+    "profile": [
+      "profile.js"
+    ],
+    "register_oauth": [
+      "register_oauth.js"
+    ]
+  },
+  "publicPath": "auto",
+  "error": "ModuleParseError",
+  "message": "Module parse failed: Unexpected token (107:31)\nYou may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders\n|     if (added_images_id.indexOf(e.target.parentNode.id)>-1)\n|         {\n>             let added_images_id.indexOf(e.target.parentNode.id)\n|             added_images.splice(added_images.indexOf(e.target.parentNode.id),1)\n| "
+}

@@ -1,0 +1,5 @@
+TPUvito/TPUvito.code-workspace
+.venv
+
+templates/index.html
+recommendations_service/generate_protoservice.bat

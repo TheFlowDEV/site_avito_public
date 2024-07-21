@@ -1,0 +1,32 @@
+{
+  "name": "tpuvito",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "sass": "^1.72.0",
+    "webpack-bundle-tracker": "^3.0.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@vkid/sdk": "^1.1.0",
+    "axios": "^1.6.8",
+    "babel": "^6.23.0",
+    "bootstrap": "^5.3.3",
+    "bootstrap5-autocomplete": "^1.1.26",
+    "compass": "^0.1.1",
+    "compass-mixins": "^0.12.12",
+    "css-loader": "^6.10.0",
+    "material-symbols": "^0.17.4",
+    "mdb-ui-kit": "^7.2.0",
+    "postcss-loader": "^8.1.1",
+    "sass-loader": "^14.1.1",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.91.0"
+  }
+}

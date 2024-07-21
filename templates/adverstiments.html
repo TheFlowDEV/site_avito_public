@@ -1,0 +1,348 @@
+<link rel="icon" href=/static/icon.svg  sizes="any" type="image/svg">
+
+{% load render_bundle from webpack_loader %} 
+{% csrf_token %}
+{% load webpush_notifications %}
+{% load static %}
+{% load TPUvito_extras %}
+{% render_bundle 'adverstiments'%}
+<head>
+    {% webpush_header %}
+    <style>
+      .material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24;
+  display: table; 
+  margin: 0 auto; 
+  
+}
+      </style>
+      
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{adv.main_name}}</title>
+</head>
+<input type="hidden" value="{{user_adv.id}}" id ="user_adv_id">
+<nav class="navbar">
+  <div class="container-fluid">
+    <div class="container-fluid d-flex flex-nowrap mb-3">
+      <a href="/"><img src={% static 'main_full.svg' %} class="me-5" style="height: 5vh;" style="cursor: pointer;" href="/" alt=""></a>
+      <div class="input-group d-none d-sm-block d-sm-flex flex-grow mb-3 input-group-lg mx-auto">
+        <input
+          type="text"
+          class="form-control round"
+          placeholder="Поиск"
+          aria-label="Поиск"
+          id="search_textbox"
+          style="background-color: rgb(242, 243, 247);"
+          aria-describedby="search_button"
+        />
+        
+        <button class="btn-outline-secondary round green_button" type="button" onclick="search()" id="search_button" data-mdb-ripple-init data-mdb-ripple-color="light">Найти</button>
+      </div>
+      <div class="d-flex ms-auto">
+       <div>
+        <div  id="notify_get" data-mdb-dropdown-init style="cursor:pointer;" class="px-2 container-fluid position-relative">
+          <div class="notify_budge"><div id="notif_count" class="translate-middle badge rounded-pill badge-success budge_green_colored">{{notif_count}}</div></div>
+          <div class="d-flex justify-content-center mb-1"><img class="mx-auto" src="{% static 'notify_icon.svg' %}" alt=""></div>
+          <div><span class="low_type d-none d-lg-block">Уведомления</span></div>
+        </div>
+          
+          <ul class="dropdown-menu scrollable-menu" aria-labelledby="dropdownMenu2" id="notifications_container">
+            {% if not notif_count.strip|is_num %}
+            <li><div class="row container border"><span>У вас нет уведомлений</span></div></li>                  
+            {% endif %}
+
+
+          </ul>
+        </div>
+          
+        {% if not user.is_authenticated %}
+      <div>
+        <div class="px-2 container-fluid" data-mdb-dropdown-init data-mdb-auto-close="outside" style="cursor: pointer;">
+          <div class="d-flex justify-content-center"><img class="justify-content-center mb-1" src={% static "person_icon.svg" %} alt=""></div>
+          <div class="d-flex"><span class="low_type d-none d-lg-block d-lg-flex">Войти</span></div>
+        </div>
+
+        <div class="dropdown-menu" id="ddown">
+          
+          <div class="px-4 py-3" id="container_of_form">
+            <div data-mdb-input-init  class="form-outline has-validation">
+                <input type="email" class="form-control" id="type_email">
+                <label class="form-label" for="type_email">Электронная почта</label>
+            </div>
+            <h6 hidden="true" class="low_type text-danger" id="VALIDATOR-5000">Неверный email или пароль</h6>
+
+
+            <div data-mdb-input-init class="form-outline has-validation mt-4 mb-3">
+                <input type="password" class="form-control" id="type_password">
+                <label for="type_password" class="form-label">Пароль</label>
+                
+            </div>
+            <button type="button"  class="btn btn-primary justify-content-center" id="login_button"onclick="register(register_type)">Войти</button>
+            <div class="container-fluid">
+              <div id="VkIdSdkOneTap"></div>
+            </div>
+          </div>
+<div class="dropdown-divider mt-4"></div>
+<a class="dropdown-item" style="cursor: pointer;" id="switch_button">Вы здесь впервые? Зарегистрируйтесь</a>
+<a class="dropdown-item"  hidden=true>Забыли пароль?</a>
+</div>
+</div>
+{% else %}
+<div class="px-2  container-fluid position-relative" id="profile_button"    data-mdb-dropdown-init style="cursor: pointer;" aria-expanded="false"   data-mdb-auto-close="inside" >
+<div class="d-flex justify-content-center mb-1"><img src={% static "person_icon.svg" %} class="justify-content-center" alt=""></div>
+<div class="d-none d-lg-block"><span class="low_type dropdown-toggle">Профиль</span></div>
+</div>
+<ul class="dropdown-menu" aria-labelledby="profile_button">
+<a class="dropdown-item" style="cursor: pointer;" href="profile"> Мой профиль</a>
+{% webpush_button with_class="dropdown-item" %}
+<a class="dropdown-item" style="cursor: pointer;"onclick="register('logout')"> Выход</a>
+</ul>
+<div class="px-2 position-relative" onclick="location.href='/add_adv'"data-bs-auto-close="outside" data-bs-toggle="dropdown" id="dropdownMenuClickableInside" style="cursor: pointer;">
+<span class="material-symbols-outlined">
+  note_stack_add
+  </span>
+<span class="text-nowrap low_type d-none d-lg-block">Добавить объявление</span>
+</div>
+{% endif %}
+        <div onclick='related()' class="px-2" style="cursor: pointer;">
+          <span class="material-symbols-outlined">
+            favorite
+            </span>
+          <span class="low_type d-none d-lg-block">Избранное</span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <div class="d-flex w-100 flex-grow input-group-lg d-block d-sm-none">
+  <input
+          type="text"
+          class="form-control round"
+          placeholder="Поиск"
+          aria-label="Поиск"
+          id="search_textbox_small"
+          style="background-color: rgb(242, 243, 247);"
+          aria-describedby="search_button"
+        />
+  <button class="btn-outline-secondary round green_button" type="button" onclick="search()" id="search_button" data-mdb-ripple-init data-mdb-ripple-color="light">Найти</button>
+
+
+  </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+
+    <div class="row">
+      <div class="col-md-9">
+        <strong class="h2">{{adv.main_name}}</strong>
+        <div id="carouselExampleCaptions" class="carousel slide" data-mdb-ride="carousel" data-mdb-carousel-init>
+          <div class="carousel-inner container-fluid">
+            <div class="carousel-item active" style="background-color:black;">
+                <img class="" src="{{adv|get_photo}}" alt="">
+              
+            </div>
+            {% for i in adv|get_photos %}
+            <div class="carousel-item" style="background-color: black;">
+                <img src="{{i}}" class=""  alt="...">
+              
+              
+            </div>
+            {% endfor %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-mdb-slide="prev" data-mdb-target="#carouselExampleCaptions">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-mdb-slide="next" data-mdb-target="#carouselExampleCaptions">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+        <div class="row mt-4">
+          <div class="col-1">
+            <span class="justify-content-start text-muted">Описание</span>
+          </div>
+          <div class="offset-2 col">
+            <span>{{adv.text}}</span>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-1">
+            <span class="justify-content-start text-muted">Категория</span>
+          </div>
+          <div class="offset-2 col">
+            <span>{{adv.category}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="d-flex">
+          <strong class="h2 justify-content-start">{{adv.cost}} ₽</strong>
+          <div class="ms-auto d-flex flex-nowrap">
+            {% if not author and user.is_authenticated %}
+              {% if is_favorite %}
+              <img  class="mb-auto heart checked_also" id="heart"onclick="toggle_heart()"style="width: 24px;" alt="">
+              {% else %}
+              <img  class="mb-auto heart" id="heart" onclick="toggle_heart()" style="width: 24px;"alt="">
+              {% endif %}
+            {% endif %}
+            {% if author %}
+            <i class="material-symbols-outlined" data-mdb-toggle="modal" data-mdb-target="#editAdvModal" data-mdb-modal-init>edit</i>
+            {% endif %}
+          </div>
+        </div>
+        
+        {% if not author and user.is_authenticated %}
+        <button onclick="connect_to_chat()"  class="btn btn-primary my-4 ms-auto">Написать сообщение</button>
+        {% endif %}
+        <div class="ms-2 d-flex border" style="cursor:pointer;" onclick="location.href='/profile?user_id={{user_adv.id}}'" style='cursor:pointer;'>
+          <div class="" style="max-width: 76px!important;height: 76px;">
+            <img  class='profile_image' src={{user_adv.photo}} alt="фотка здесь">
+          </div>
+          <div class="">
+            <div class=""><span class=" text-nowrap">{{user_adv.username}}</span></div>
+            <div class=""style="width: 16px;height: 16px;">
+              <div  class='d-inline-flex'>
+                <span  class='my-auto me-1' id="rating" style="color: #FFCD4B;font-size: 16px">
+                  {% if rating %}
+                    {{rating|floatformat:1}} 
+                  {% else %} 
+                    0 
+                  {% endif %}
+                  </span>
+                {{rating|set_stars}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+
+  </div>
+
+  <hr class="hr big_margin" />
+
+  <footer class="bg-light ">
+    <div class="container p-4">
+  
+      <section class="">
+        <div class="row">
+          <div class="col mb-4">
+            <h6 class="mb-2"><strong>Покупателям</strong></h6>
+  
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <a href="#!" class="text-secondary">Каталог</a>
+              </li>
+              <li class="mb-2">
+                <a href="#!" class="text-secondary">Поддержка</a>
+              </li>
+              <li class="mb-2">
+                <a href="#!" class="text-secondary">Политика конфиденциальности</a>
+              </li>
+              <li class="mb-2">
+                <a href="#!" class="text-secondary">Условия использования</a>
+              </li>
+            </ul>
+          </div>
+  
+          <div class="col mb-4 justify-content-center">
+            <h6 class="mb-2"><strong>Компания</strong></h6>
+  
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <a href="#!" class="text-secondary mb-1">О компании</a>
+              </li>
+              <li class="mb-2">
+                <a href="#!" class="text-secondary mb-1">Правообладателям</a>
+              </li>
+            </ul>
+          </div>
+  
+          <div class="col mb-4 ">
+            <h6 class=""><strong>Наше приложение</strong></h6>
+  
+            <ul class="list-unstyled mb-0">
+              <li>
+                <a href="#!" class="text-secondary">Скоро на Android!</a>
+              </li>
+            </ul>
+          </div>
+      </section>
+  
+    </div>
+  
+  </footer>
+  {% if author %}
+  <!-- Модальное окно для редактирования -->
+  <div class="modal fade" id="editAdvModal" tabindex="-1" aria-labelledby="editAdvModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editAdvModalLabel">Редактирование объявления</h5>
+          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="nameEdit" class="form-label">Название</label>
+              <input type="text" class="form-control" id="nameEdit" placeholder="Название" required>
+            </div>
+            <div class="mb-3">
+              <label for="priceEdit" class="form-label">Цена</label>
+              <input type="number" class="form-control" id="priceEdit" placeholder="Цена" required>
+            </div>
+            <div class="mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="activeSwitch" {% if is_active %} checked {% endif %}>
+                <label class="form-check-label" for="activeSwitch">Активный</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="descriptionEdit" class="form-label">Описание</label>
+              <textarea class="form-control" id="descriptionEdit" placeholder="Описание" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="photoEdit" class="form-label">Фотографии</label>
+              <div class="d-flex" id ="photos_redact">
+                {% if adv|get_photo_for_profile %}
+                <div class="d-inline-flex align-items-center gap-3" id="old_{{adv|get_primary_name}}"style="position: relative;">
+                  <img src={{ adv|get_photo }} alt="" style="width: 100px;height: 100px;">
+                  <button type="button" class="btn-close position-absolute top-0 end-0" onclick="delete_image(event)"style="background-color: white;" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                {% for i,name in adv|get_photos_for_profile %}
+                <div class="d-flex align-items-center gap-3" id="old_{{name}}" style="position: relative;">
+                  <img src={{i}} style="width:100px;height: 100px;"alt="">
+                  <button type="button" class="btn-close position-absolute top-0 end-0" onclick="delete_image(event)" style="background-color: white;" aria-label="Close"></button>
+                  
+                </div>
+                {% endfor %}
+                <div class="d-flex align-items-center justify-content-center" id="input_causer" style="width: 100px; height: 100px; border: 1px dashed #ccc; border-radius: 4px; cursor: pointer;">
+                  <div class="d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="material-symbols-outlined">add</i>
+                  </div>
+                </div>
+                <input class="d-none" type="file" id="photoEdit" multiple accept="image/*"required>
+              </div>
+              <div class="form-text">Можно выбрать несколько фотографий</div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="clear_all()" data-mdb-dismiss="modal">Отмена</button>
+          <button type="button" class="btn btn-primary" onclick ="save()">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

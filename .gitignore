@@ -1,0 +1,10 @@
+TPUvito/TPUvito.code-workspace
+.venv
+node_modules
+media
+TPUvito/TPUvito/__pycache__
+TPUvito/users/__pycache__
+TPUvito/webpush/__pycache__
+staticfiles
+error.log
+debug.log

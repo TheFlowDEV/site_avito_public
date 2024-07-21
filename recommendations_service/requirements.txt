@@ -1,0 +1,7 @@
+grpcio
+psycopg2
+pandas
+scikit-learn
+grpcio-tools
+google
+sentence_transformers

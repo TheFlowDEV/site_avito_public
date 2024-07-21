@@ -1,0 +1,198 @@
+{% load static %}
+<head>
+  <link rel="icon" href={% static "icon.svg" %}  sizes="any" type="image/svg">
+
+{% load render_bundle from webpack_loader %} 
+{% csrf_token %}
+{% load webpush_notifications %}
+{% render_bundle 'add_adv' %}
+{% load TPUvito_extras %}
+<style>
+  .material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+    display:table;
+    margin:0 auto;
+  }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Добавить объявление</title>
+</head>
+
+<body>
+  <nav class="navbar">
+      <div class="d-flex mb-3">
+        <a href="/"><img src={% static "main_full.svg" %} class="me-5" height="50" style="cursor: pointer;" href="/" alt=""></a>
+          
+          
+        </div>
+        <div class="d-none d-sm-flex justify-content-end">
+         <div>
+          <div  id="notify_get" data-mdb-dropdown-init style="cursor:pointer;" class="px-3 container-fluid position-relative">
+            <div class="notify_budge"><div id="notif_count" class="translate-middle badge rounded-pill badge-success budge_green_colored">{{notif_count}}</div></div>
+            <div class="d-flex justify-content-center mb-1"><img class="mx-auto" src={% static "notify_icon.svg" %} alt=""></div>
+            <div><span class="low_type">Уведомления</span></div>
+          </div>
+            
+            <ul class="dropdown-menu scrollable-menu" aria-labelledby="dropdownMenu2" id="notifications_container">
+              {% if not notif_count.strip|is_num %}
+              <li><div class="row container border"><span>У вас нет уведомлений</span></div></li>                  
+              {% endif %}
+
+
+            </ul>
+          </div>  
+<div class="px-3  container-fluid position-relative" id="profile_button"    data-mdb-dropdown-init style="cursor: pointer;" aria-expanded="false"   data-mdb-auto-close="inside" >
+  <div class="d-flex justify-content-center mb-1"><img src={% static "person_icon.svg" %} class="justify-content-center" alt=""></div>
+  <div class="d-flex"><span class="low_type dropdown-toggle">Профиль</span></div>
+</div>
+<ul class="dropdown-menu" aria-labelledby="profile_button">
+  <a class="dropdown-item" style="cursor: pointer;" href="profile"> Мой профиль</a>
+  {% webpush_button with_class="dropdown-item" %}
+  <a class="dropdown-item" style="cursor: pointer;"onclick="register('logout')"> Выход</a>
+</ul>
+<div onclick="related()" style='cursor:pointer;' class="px-3">
+  <span class="material-symbols-outlined">
+    favorite
+    </span>
+  <span class="low_type">Избранное</span>
+</div>
+        </div>
+    </div>
+  </nav>
+<div class="container-fluid">
+
+  <div class="row my-3">
+    <div class="col col-3 col-md-2 col-lg-1" id="back_row" hidden="true"><button id="back_button" class="btn btn-outline-primary"><span class="material-symbols-outlined">
+      arrow_back
+      </span></button></div>
+      <div class="col">
+        <h2 style="text-align: start;" class=""><strong>Создание объявления</strong></h2>
+      </div>
+    
+  </div>
+    <div class="container-fluid mb-14 row justify-content-start" id =wrapper>
+        <div class="col col-md-4 col-lg-2 col-6">
+          <ul class=" list-group list-unstyled">
+<button class="btn mb-3 ms-md-5">Одежда</button>
+<button class="btn mb-3 ms-md-5 ">Канцелярия</button>
+<button class="btn mb-3 ms-md-5 ">Товары для дома</button>
+<button class="btn mb-3 ms-md-5 ">Электроника</button>
+          </ul>
+        </div>
+        <div class="col col-lg-2 col-md-4 col-6">
+          <ul class=" list-group list-unstyled">
+<button class="btn mb-3 ms-md-5">Хобби и творчество</button>
+<button class="btn mb-3 ms-md-5 ">Украшения и бижутерия</button>
+<button class="btn mb-3 ms-md-5 ">Здоровье</button>
+<button class="btn mb-3 ms-md-5">Бытовая техника</button>
+<button class="btn mb-3 ms-md-5 ">Разное</button>
+
+          </ul>
+        </div>
+      </div>
+      <div class="mb-14 mx-auto container-fluid" id="next_page" hidden="true">
+          
+              
+              <div class="row mb-3 ms-md-5">
+                <div class="col col-lg-1 col-md-3 col-4 "><span>Название объявления</span></div>
+                
+                <div class="col col-lg-4 col-md-6 col-8"><input class="form-control" type="text" id ="main_name"></div>
+              </div>
+              <div class="row mb-3 ms-md-5">
+                <div class="col col-lg-1 col-md-3 col-4 "><span>Категория</span></div>
+                
+                <div class="col col-lg-4 col-md-6 col-8"><input class="form-control" type="text" id ="main_category" disabled></div>
+              </div>
+              <div class="row mb-3 ms-md-5">
+                <div class="col col-lg-1 col-md-3 col-4 "><span>Описание объявления</span></div>
+                <div class="col col-lg-4 col-md-6 col-8"><textarea class="form-control" id="description" type="text" rows="8"></textarea></div>
+              </div>
+              <div class="row mb-3 ms-md-5">
+                <div class="col col-lg-1 col-md-3 col-4 "><span class="form-label" for="file_input">Фотографии</span></div>
+                <div class="col col-lg-4 col-md-6 col-8"><div class="custom__form">
+                  <div id = 'custom__image-container' class="custom__image-container d-flex">
+                    
+                    
+                  </div>
+                  <label id="add-img-label" for="image-input">+</label>
+                    <input
+                    type="file"
+                    id="image-input"
+                    name="photos"
+                    accept="image/*"
+                  />
+                  <br />
+              </div></div>
+              </div>
+              <div class="row mb-5 ">
+                <div class="ms-md-5 col col-lg-1 col-md-3 col-4">
+                  <span>Цена</span>
+                </div>
+                <div class="col col-lg-2 col-md-6 col-8">
+                  <input type="number" class=form_control placeholder="₽" id="cost">
+                </div>
+              </div>
+            <div class="d-flex ms-md-5">
+              <button class="justify-content-sm-center justify-content-md-start  btn btn-outline-primary" id="add_adv_button">Разместить</button></div>
+
+
+      </div>
+
+    </div>
+    <hr class="hr" />
+
+    <footer class="bg-light ">
+      <div class="container p-4">
+    
+        <section class="">
+          <div class="row">
+            <div class="col mb-4">
+              <h6 class="mb-2"><strong>Покупателям</strong></h6>
+    
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <a href="#!" class="text-secondary">Каталог</a>
+                </li>
+                <li class="mb-2">
+                  <a href="#!" class="text-secondary">Поддержка</a>
+                </li>
+                <li class="mb-2">
+                  <a href="#!" class="text-secondary">Политика конфиденциальности</a>
+                </li>
+                <li class="mb-2">
+                  <a href="#!" class="text-secondary">Условия использования</a>
+                </li>
+              </ul>
+            </div>
+    
+            <div class="col mb-4 justify-content-center">
+              <h6 class="mb-2"><strong>Компания</strong></h6>
+    
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <a href="#!" class="text-secondary mb-1">О компании</a>
+                </li>
+                <li class="mb-2">
+                  <a href="#!" class="text-secondary mb-1">Правообладателям</a>
+                </li>
+              </ul>
+            </div>
+    
+            <div class="col mb-4 ">
+              <h6 class=""><strong>Наше приложение</strong></h6>
+    
+              <ul class="list-unstyled mb-0">
+                <li>
+                  <a href="#!" class="text-secondary">Скоро на Android!</a>
+                </li>
+              </ul>
+            </div>
+        </section>
+    
+      </div>
+    
+    </footer>

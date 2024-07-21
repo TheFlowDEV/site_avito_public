@@ -1,0 +1,21 @@
+version: '3'
+services:
+  psql:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=zjsjI3Km4b2kK~!E
+      - POSTGRES_DB=django
+    ports:
+      - 5432:5432
+  recommendations_service:
+    build: recommendations_service/
+    command: python recommendation_server.py 
+    ports:
+     - 50051:50051
+    depends_on:
+      - psql
+  redis_ws:
+    image: redis
+    ports:
+      - 6379:6379
+    command: redis-server --bind 0.0.0.0

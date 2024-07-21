@@ -1,0 +1,20 @@
+syntax = "proto3";
+service Recommendations
+{
+    rpc UpdateRecommendations(rec4msg) returns (Recommendations_list){}
+    rpc UpdateRecommendationsByCategory(rec4msg_category) returns (Recommendations_list){}
+}
+message Recommendations_list
+{
+    repeated int64 id = 1;
+}
+message rec4msg
+{
+    repeated int64 adv_id = 1;
+}
+message rec4msg_category
+{
+    repeated int64 adv_id = 1;
+    string category = 2;
+}
+message void{}

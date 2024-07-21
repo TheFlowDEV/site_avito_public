@@ -1,0 +1,1 @@
+python -m grpc_tools.protoc -I C:\Users\wladimir\Desktop\u_project\TPUvito\recommendations_service --python_out=. --pyi_out=. --grpc_python_out=. service.proto
